@@ -8,6 +8,9 @@ phases:
   install:
     commands:
       - env
+      - echo "export myvar=abc" >> var
+      - source var
+      - env | grep myvar
   pre_build:
     commands:
       - echo Nothing to do in the pre_build phase...
