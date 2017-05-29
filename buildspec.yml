@@ -13,14 +13,8 @@ phases:
       - env
   pre_build:
     commands:
-      - terraform -v
-      - packer -v
-      - ansible --version
-      - ip addr show
-      - aws --version
       - curl -s 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r '.SecretAccessKey , .Token ,.AccessKeyId'
-#      - curl 168.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r  '.SecretAccessKey , .Token ,.AccessKeyId'
-#      - for i in `curl -s 168.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r  '.SecretAccessKey , .Token ,.AccessKeyId'` ;do echo $i ; done
+      - for i in `curl -s 168.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r  '.SecretAccessKey , .Token ,.AccessKeyId'` ;do echo $i ; done
 #      - var=(AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_ACCESS_KEY_ID); for i in `curl -s 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r  '.SecretAccessKey , .Token ,.AccessKeyId'`; do source <(echo "export ${var[@]:0:1}=$i");var=("${var[@]:1}"); done
 #      - env | grep AWS
   build:
