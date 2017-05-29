@@ -13,14 +13,17 @@ phases:
       - env | sort
   pre_build:
     commands:
-      - curl -s 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r '.SecretAccessKey , .Token ,.AccessKeyId'
-      - for i in $(curl -s 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r ".SecretAccessKey , .Token ,.AccessKeyId"); do echo $i; done
-      - bash -c 'for i in $(curl -s 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r ".SecretAccessKey , .Token ,.AccessKeyId"); do echo $i; done'
+      - aws_var=(AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_ACCESS_KEY_ID);for i in $(curl -s 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r ".SecretAccessKey , .Token ,.AccessKeyId"); do source <( echo "export ${aws_var[@]:0:1}=$i" ); var=("${var[@]:1}"); done
+      -env | grep AWS
+
+#      - curl -s 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r '.SecretAccessKey , .Token ,.AccessKeyId'
+#      - for i in $(curl -s 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r ".SecretAccessKey , .Token ,.AccessKeyId"); do echo $i; done
+#      - bash -c 'for i in $(curl -s 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r ".SecretAccessKey , .Token ,.AccessKeyId"); do echo $i; done'
 #      - var=(AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_ACCESS_KEY_ID); for i in `curl -s 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r  '.SecretAccessKey , .Token ,.AccessKeyId'`; do source <(echo "export ${var[@]:0:1}=$i");var=("${var[@]:1}"); done
 #      - env | grep AWS
   build:
     commands:
-      - env
+#      - env
       - ip addr show
   #    - curl -s 168.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r  '.SecretAccessKey , .Token ,.AccessKeyId'
   #    - bash -c "paste -d '=' <(echo -e 'AWS_SECRET_ACCESS_KEY\nAWS_SESSION_TOKEN\nAWS_ACCESS_KEY_ID') <(curl -s 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r  '.SecretAccessKey , .Token ,.AccessKeyId' ) | paste <(echo -e 'export\nexport\nexport') - > c_env"
