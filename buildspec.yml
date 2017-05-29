@@ -14,6 +14,7 @@ phases:
   pre_build:
     commands:
       - bash -c 'aws_var=(AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_ACCESS_KEY_ID); for i in $(curl -s 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r ".SecretAccessKey , .Token ,.AccessKeyId"); do  echo "export ${aws_var[@]:0:1}=$i" >> c_env; var=("${var[@]:1}"); done ; cat c_env'
+      - source c_env
 #      -  bash -c "paste -d '=' <(echo -e 'AWS_SECRET_ACCESS_KEY\nAWS_SESSION_TOKEN\nAWS_ACCESS_KEY_ID') <(curl -s 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r  '.SecretAccessKey , .Token ,.AccessKeyId' ) | paste <(echo -e 'export\nexport\nexport') - > c_env"
       - env | grep AWS
 
