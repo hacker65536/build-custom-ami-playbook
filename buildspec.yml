@@ -2,25 +2,29 @@ version: 0.2
 
 env:
   variables:
-    JAVA_HOME: "/usr/lib/jvm/java-8-openjdk-amd64"
+    PLATFORM: "centos6"
+    SRV_TYPE: "dev"
+    EBS_VOLUME_SIZE: "100"
+
 
 phases:
   install:
     commands:
-      - env
-      - echo "export myvar=abc" >> var
-      - source ./var
-      - env | grep myvar
   pre_build:
     commands:
-      - echo Nothing to do in the pre_build phase...
+      - curl 168.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r  '.SecretAccessKey , .Token ,.AccessKeyId'
+      - for i in `curl -s 168.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r  '.SecretAccessKey , .Token ,.AccessKeyId'` ;do echo $i ; done
+#      - var=(AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_ACCESS_KEY_ID); for i in `curl -s 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r  '.SecretAccessKey , .Token ,.AccessKeyId'`; do source <(echo "export ${var[@]:0:1}=$i");var=("${var[@]:1}"); done
+#      - env | grep AWS
   build:
     commands:
-      - echo Build started on `date`
+  #    - bash -c "paste -d '=' <(echo -e 'AWS_SECRET_ACCESS_KEY\nAWS_SESSION_TOKEN\nAWS_ACCESS_KEY_ID') <(curl -s 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r  '.SecretAccessKey , .Token ,.AccessKeyId' ) | paste <(echo -e 'export\nexport\nexport') - > c_env"
+  #    - bash -c "export USER=root ; source c_env && packer build -color=false -machine-readable -var \"srcver=${CODEBUILD_RESOLVED_SOURCE_VERSION:0:7}\" -var \"playbook_file=${SRV_TYPE}.yml\" -var \"ebs_volume_size=${EBS_VOLUME_SIZE}\" -var-file=var.json ${PLATFORM}.json | tee build.log"
+        
   post_build:
     commands:
-      - echo Build completed on `date`
+      - echo build completed on `date`
+
 #artifacts:
 #  files:
-#    - target/messageUtil-1.0.jar
-#  discard-paths: yes
+#    - manifest.json
