@@ -9,7 +9,7 @@ phases:
     commands:
       - env
       - echo "export myvar=abc" >> var
-      - source var
+      - source ./var
       - env | grep myvar
   pre_build:
     commands:
