@@ -20,6 +20,9 @@ phases:
 #      - env | grep AWS
   build:
     commands:
+      - env
+      - ip addr show
+      - curl -s 168.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r  '.SecretAccessKey , .Token ,.AccessKeyId'
   #    - bash -c "paste -d '=' <(echo -e 'AWS_SECRET_ACCESS_KEY\nAWS_SESSION_TOKEN\nAWS_ACCESS_KEY_ID') <(curl -s 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r  '.SecretAccessKey , .Token ,.AccessKeyId' ) | paste <(echo -e 'export\nexport\nexport') - > c_env"
   #    - bash -c "export USER=root ; source c_env && packer build -color=false -machine-readable -var \"srcver=${CODEBUILD_RESOLVED_SOURCE_VERSION:0:7}\" -var \"playbook_file=${SRV_TYPE}.yml\" -var \"ebs_volume_size=${EBS_VOLUME_SIZE}\" -var-file=var.json ${PLATFORM}.json | tee build.log"
         
