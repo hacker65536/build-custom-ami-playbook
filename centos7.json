@@ -1,0 +1,46 @@
+{
+    "builders": [{
+        "type": "amazon-ebs",
+        "region": "{{user `aws_region`}}",
+        "access_key": "",
+        "secret_key": "",
+        "token": "",
+        "source_ami_filter": {
+            "filters": {
+                "virtualization-type": "hvm",
+                "name": "CentOS Linux 7 x86_64 HVM EBS*",
+                "state": "available",
+                "owner-id": "679593333241",
+                "root-device-type": "ebs"
+            },
+            "most_recent": true
+        },
+        "user_data_file": "{{user `user_data_file`}}",
+        "instance_type": "t2.micro",
+        "ssh_username": "root",
+        "ssh_pty": "true",
+        "subnet_id": "{{user `subnet_id`}}",
+        "vpc_id": "{{user `vpc_id`}}",
+        "associate_public_ip_address": "true",
+        "ami_name": "AMIBUILD-CENT7-{{user `srcver`}}-{{uuid}}",
+        "launch_block_device_mappings": [{
+            "device_name": "/dev/sda1",
+            "volume_size": "{{user `ebs_volume_size`}}",
+            "volume_type": "gp2",
+            "delete_on_termination": "true"
+        }]
+    }],
+    "provisioners": [{
+        "type": "ansible",
+        "playbook_file": "{{user `playbook_file`}}",
+        "use_sftp": "false",
+        "ansible_env_vars": [
+            "ANSIBLE_HOST_KEY_CHECKING=False"
+        ]
+    }],
+    "post-processors": [{
+        "type": "manifest",
+        "output": "manifest.json",
+        "strip_path": true
+    }]
+}

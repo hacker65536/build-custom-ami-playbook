@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    PLATFORM: "centos6"
+    PLATFORM: "centos7"
     SRV_TYPE: "dev"
     EBS_VOLUME_SIZE: "100"
 
@@ -12,9 +12,9 @@ phases:
     commands:
 #      - curl -s 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r '.SecretAccessKey , .Token ,.AccessKeyId'
 #      - echo "------env------" ; env | sort ; echo "------env------"
-      - bash -c 'aws_var=(AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_ACCESS_KEY_ID); for i in $(curl -s 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r ".SecretAccessKey , .Token ,.AccessKeyId"); do  echo "export ${aws_var[@]:0:1}=$i" >> c_env; aws_var=("${aws_var[@]:1}"); done ; cat c_env; pwd; ls -la'
+      - bash -c 'aws_var=(AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_ACCESS_KEY_ID); for i in $(curl -s 169.254.170.2$AWS_CONTAINER_CREDENTIALS_RELATIVE_URI | jq -r ".SecretAccessKey , .Token ,.AccessKeyId"); do  echo "export ${aws_var[@]:0:1}=$i" >> c_env; aws_var=("${aws_var[@]:1}"); done ;'
       - source ./c_env
-      - echo "------env------" ; env | grep AWS ; echo "------env------"
+      - echo "------------env------------" ; env | grep AWS | sort ; echo "------------env------------"
   pre_build:
     commands:
       - terraform -v ; packer -v ; ansible --version ; aws --version
