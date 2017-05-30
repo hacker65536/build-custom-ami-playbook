@@ -1,0 +1,5 @@
+#cloud-config
+bootcmd:
+ - setenforce 0
+runcmd:
+ - sed -e 's/^\(\s- set_hostname\)/#\1/' -e 's/^\(\s- update_hostname\)/#\1/' -e 's/^\(\s- ssh\)/#\1/' -i /etc/cloud/cloud.cfg
