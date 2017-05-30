@@ -21,7 +21,7 @@ phases:
 
   build:
     commands:
-      - bash -c "packer build -color=false -machine-readable -var \"srcver=${CODEBUILD_RESOLVED_SOURCE_VERSION:0:7}\" -var \"playbook_file=${SRV_TYPE}.yml\" -var \"ebs_volume_size=${EBS_VOLUME_SIZE}\" -var-file=var.json ${PLATFORM}.json | tee build.log"
+      - bash -c 'packer build -color=false -machine-readable -var "srcver=${CODEBUILD_RESOLVED_SOURCE_VERSION:0:7}" -var "playbook_file=${SRV_TYPE}.yml" -var "ebs_volume_size=${EBS_VOLUME_SIZE}" ${PLATFORM}.json | tee build.log'
         
   post_build:
     commands:
