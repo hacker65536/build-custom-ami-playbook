@@ -3,7 +3,7 @@ version: 0.2
 env:
   variables:
     PLATFORM: "centos7"
-    SRV_TYPE: "dev"
+    SRV_TYPE: "centos7_dev"
     EBS_VOLUME_SIZE: "100"
 
 
@@ -21,7 +21,7 @@ phases:
 
   build:
     commands:
-      - bash -c 'export USER=root ; packer build -color=false -machine-readable -var "srcver=${CODEBUILD_RESOLVED_SOURCE_VERSION:0:7}" -var "playbook_file=${SRV_TYPE}.yml" -var "ebs_volume_size=${EBS_VOLUME_SIZE}" ${PLATFORM}.json | tee build.log'
+      - bash -c 'export USER=root ; packer build -color=false -machine-readable -var "srcver=${CODEBUILD_RESOLVED_SOURCE_VERSION:0:7}" -var "ebs_volume_size=${EBS_VOLUME_SIZE}" ${PLATFORM}.json | tee build.log'
         
   post_build:
     commands:

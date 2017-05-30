@@ -3,7 +3,10 @@
         "aws_region": "{{env `REGION`}}",
         "user_data_file": "user_data.yml",
         "vpc_id": "{{env `VPC_ID`}}",
-        "subnet_id": "{{env `SUBNET_ID`}}"
+        "subnet_id": "{{env `SUBNET_ID`}}",
+        "ebs_volume_size": "{{env `EBS_VOLUME_SIZE`}}",
+        "playbook_file": "{{env `SRV_TYPE`}}.yml",
+        "platform": "{{env `PLATFORM`}}"
     },
     "builders": [{
         "type": "amazon-ebs",
@@ -41,6 +44,10 @@
         "use_sftp": "false",
         "ansible_env_vars": [
             "ANSIBLE_HOST_KEY_CHECKING=False"
+        ],
+        "extra_arguments": [
+            "--extra-vars",
+            "platform={{user `platform`}}"
         ]
     }],
     "post-processors": [{

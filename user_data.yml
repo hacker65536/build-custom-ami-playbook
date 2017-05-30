@@ -1,4 +1,6 @@
 #cloud-config
+disable_root: False
+
 bootcmd:
  - setenforce 0
 runcmd:
